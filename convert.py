@@ -1,9 +1,11 @@
 from mlserver.types import MetadataTensor
-from fastapi import FastAPI, HTTPException
+from fastapi import HTTPException
 import PIL.Image
+import json
 
 def convert_to_v2_input(hf_pipeline, input_data):
     if hf_pipeline == "zero-shot-classification":
+        input_data = json.loads(input_data)
         v2_input = {
             "inputs": [
                 MetadataTensor(
@@ -38,6 +40,7 @@ def convert_to_v2_input(hf_pipeline, input_data):
                 "outputs": [],
             }
     elif hf_pipeline == "text-generation":
+        input_data = json.loads(input_data)
         v2_input = {
             "inputs": [
                 MetadataTensor(
@@ -51,6 +54,7 @@ def convert_to_v2_input(hf_pipeline, input_data):
             "outputs": [],
         }
     elif hf_pipeline == "token-classification":
+        input_data = json.loads(input_data)
         v2_input = {
             "inputs": [
                 MetadataTensor(

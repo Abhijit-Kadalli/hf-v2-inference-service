@@ -8,8 +8,8 @@ from convert import convert_to_v2_input
 app = FastAPI()
 
 
-class HFInput(BaseModel):
-    inputs: dict
+# class HFInput(BaseModel):
+#     inputs: dict
 
 
 def forward_request_to_model(model_deployed_url, v2_input):
@@ -22,8 +22,8 @@ def forward_request_to_model(model_deployed_url, v2_input):
 
 
 @app.post("/")
-def predict(hf_pipeline: str, model_deployed_url: str, input_data: HFInput):
-    v2_input = convert_to_v2_input(hf_pipeline, input_data.inputs)
+def predict(hf_pipeline: str, model_deployed_url: str, input_data):
+    v2_input = convert_to_v2_input(hf_pipeline, input_data)
     response = forward_request_to_model(model_deployed_url, v2_input)
     return response
 
