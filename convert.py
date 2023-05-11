@@ -9,7 +9,6 @@ from typing import Any, Dict, List, Optional
 
 from pydantic import Extra, Field
 
-
 class BaseModel(_BaseModel):
     """
     Override Pydantic's BaseModel class to ensure all payloads exclude unset
@@ -42,20 +41,11 @@ class MetadataTensor(BaseModel):
     shape: List[int]
     parameters: Optional["Parameters"] = None
 
-# class MetadataTensor:
-#     def __init__(
-#         self,
-#         name: str,
-#         datatype: str,
-#         shape: List[int],
-#         parameters: Optional[dict] = None,
-#         data: Optional[list] = None,
-#     ):
-#         self.name = name
-#         self.datatype = datatype
-#         self.shape = shape
-#         self.parameters = parameters
-#         self.data = data
+class MetadataTensorEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, MetadataTensor):
+            return obj.dict()
+        return super().default(obj)
 
 def convert_to_v2_input(hf_pipeline, input_data):
     if hf_pipeline == "zero-shot-classification":
@@ -79,6 +69,9 @@ def convert_to_v2_input(hf_pipeline, input_data):
             ],
             "outputs": [],
         }
+        print("Converted to V2 input: " + str(v2_input))
+        return json.dumps(v2_input, cls=MetadataTensorEncoder)
+
     elif hf_pipeline == "object-detection":
         if isinstance(input_data[0], PIL.Image.Image):
             v2_input = {
@@ -93,6 +86,8 @@ def convert_to_v2_input(hf_pipeline, input_data):
                 ],
                 "outputs": [],
             }
+        print("Converted to V2 input: " + str(v2_input))
+        return json.dumps(v2_input, cls=MetadataTensorEncoder)
     elif hf_pipeline == "text-generation":
         input_data = json.loads(input_data)
         v2_input = {
@@ -107,6 +102,8 @@ def convert_to_v2_input(hf_pipeline, input_data):
             ],
             "outputs": [],
         }
+        print("Converted to V2 input: " + str(v2_input))
+        return json.dumps(v2_input, cls=MetadataTensorEncoder)
     elif hf_pipeline == "token-classification":
         input_data = json.loads(input_data)
         v2_input = {
@@ -121,8 +118,8 @@ def convert_to_v2_input(hf_pipeline, input_data):
             ],
             "outputs": [],
         }
+        print("Converted to V2 input: " + str(v2_input))
+        return json.dumps(v2_input, cls=MetadataTensorEncoder)
     else:
         # Handle unsupported pipeline
         raise HTTPException(status_code=400, detail="Unsupported pipeline")
-
-    return v2_input
