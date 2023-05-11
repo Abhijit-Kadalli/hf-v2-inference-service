@@ -35,7 +35,7 @@ These instructions will help you set up and run the Hugging Face V2 Inference Se
 1. Start the service:
 
    ```bash
-   uvicorn main:app --reload --hf_pipeline <pipeline_name> --model_deployed_url <model_url>
+   python main.py --hf_pipeline <pipeline_name> --model_deployed_url <model_url>
    ```
     Replace <pipeline_name> with the desired Hugging Face pipeline name (e.g., zero-shot-classification, object-detection, text-generation, token-classification) and <model_url> with the deployed endpoint URL provided by Truefoundry.
 
