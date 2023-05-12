@@ -4,6 +4,7 @@ from fastapi import FastAPI, HTTPException
 import uvicorn
 from convert import convert_to_v2_input
 import json
+from urllib.parse import urljoin
 
 
 app = FastAPI()
@@ -17,7 +18,12 @@ args = parser.parse_args()
 pipeline_name = args.hf_pipeline
 model_deployed_url = args.model_deployed_url
 
+model_deployed_name = {
+    "zero-shot-classification": "zero-shot-cl-test",
+}
+
 def forward_request_to_model(model_deployed_url, v2_input):
+    model_deployed_url = model_deployed_url + '/v2/models/'+ model_deployed_name[pipeline_name] +'/infer'
     print("Forwarding request to model..." + model_deployed_url)
     try:
         response = requests.post(model_deployed_url, json=v2_input)
