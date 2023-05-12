@@ -2,7 +2,7 @@ import argparse
 import requests
 from fastapi import FastAPI, HTTPException
 import uvicorn
-from convert import convert_to_v2_input
+from convert import *
 import json
 from urllib.parse import urljoin
 
@@ -20,6 +20,7 @@ model_deployed_url = args.model_deployed_url
 
 model_deployed_name = {
     "zero-shot-classification": "zero-shot-cl-test",
+    "text-generation": "text-gen-test",
 }
 
 def forward_request_to_model(model_deployed_url, v2_input):
