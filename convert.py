@@ -45,45 +45,49 @@ def convert_to_v2_input(hf_pipeline, input_data):
     print("Received request for pipeline: " + hf_pipeline + " with input: " + str(input_data))
     print(type(input_data))
     if hf_pipeline == "zero-shot-classification":
-        v2_input = {
-        "inputs": [
+        v2_input =   {
+            "parameters": {
+            "content_type": "application/json",
+            "headers": {}
+            },
+            "inputs": [
             {
-            "name": "array_inputs",
-            "shape": [
+                "name": "array_inputs",
+                "shape": [
                 -1
-            ],
-            "datatype": "BYTES",
-            "parameters": {
-                "content_type": "str",
+                ],
+                "datatype": "BYTES",
+                "parameters": {
+                "content_type": "application/json",
                 "headers": {}
-            },
-            "data": input_data['inputs']
+                },
+                "data": input_data["inputs"]
             },
             {
-            "name": "candidate_labels",
-            "shape": [
+                "name": "candidate_labels",
+                "shape": [
                 -1
+                ],
+                "datatype": "BYTES",
+                "parameters": {
+                "content_type": "application/json",
+                "headers": {}
+                },
+                "data": json.dumps(input_data['parameters']['candidate_labels'])
+            }
             ],
-            "datatype": "BYTES",
-            "parameters": {
-                "content_type": "str",
-                "headers": {}
-            },
-            "data": input_data['parameters']['candidate_labels']
-            }
-        ],
-        "outputs": [
+            "outputs": [
             {
-            "name": "string",
-            "parameters": {
-                "content_type": "string",
+                "name": "output_*",
+                "parameters": {
+                "content_type": "application/json",
                 "headers": {}
+                }
             }
-            }
-        ]
+            ]
         }
         print("Converted to V2 input: " + str(v2_input))
-        return json.dumps(v2_input)
+        return v2_input
 
     elif hf_pipeline == "object-detection":
         v2_input = {
