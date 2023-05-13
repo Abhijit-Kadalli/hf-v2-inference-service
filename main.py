@@ -26,8 +26,10 @@ model_deployed_name = {
 def forward_request_to_model(model_deployed_url, v2_input):
     model_deployed_url = model_deployed_url + '/v2/models/'+ model_deployed_name[pipeline_name] +'/infer'
     print("Forwarding request to model..." + model_deployed_url)
+    v2_input = json.dumps(v2_input)
+    print(type(v2_input))
     try:
-        response = requests.post(model_deployed_url, json=v2_input)
+        response = requests.post(model_deployed_url, data=v2_input)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:

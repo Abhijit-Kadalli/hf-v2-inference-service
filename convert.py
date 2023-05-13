@@ -104,20 +104,32 @@ def convert_to_v2_input(hf_pipeline, input_data):
         return json.dumps(v2_input)
     elif hf_pipeline == "text-generation":
         v2_input = {
-              "inputs": [
-                    {
-                    "name": "array_inputs",
-                    "shape": [
-                        -1
-                    ],
-                    "datatype": "BYTES",
-                    "data": input_data["inputs"],
-                    }
+            "inputs": [
+                {
+                "name": "text_inputs",
+                "shape": [
+                    0
                 ],
-                "outputs": []
+                "datatype": "BOOL",
+                "parameters": {
+                    "content_type": "string",
+                    "headers": {}
+                },
+                "data": input_data['inputs']
                 }
+            ],
+            "outputs": [
+                {
+                "name": "string",
+                "parameters": {
+                    "content_type": "string",
+                    "headers": {}
+                }
+                }
+            ]
+            }
         print("Converted to V2 input: " + str(v2_input))
-        return json.dumps(v2_input)
+        return v2_input
     elif hf_pipeline == "token-classification":
         input_data = json.loads(input_data)
         v2_input = {
