@@ -42,8 +42,7 @@ import json
 #     parameters: Optional["Parameters"] = None
 
 def convert_to_v2_input(hf_pipeline, input_data):
-    print("Received request for pipeline: " + hf_pipeline + " with input: " + str(input_data))
-    print(type(input_data))
+    print("\nReceived request for pipeline: " + hf_pipeline + " with input: " + str(input_data))
     if hf_pipeline == "zero-shot-classification":
         v2_input =   {
             "parameters": {
@@ -86,7 +85,6 @@ def convert_to_v2_input(hf_pipeline, input_data):
             }
             ]
         }
-        print("Converted to V2 input: " + str(v2_input))
         return v2_input
 
     elif hf_pipeline == "object-detection":
@@ -120,7 +118,6 @@ def convert_to_v2_input(hf_pipeline, input_data):
             }
         ]
         }
-        print("Converted to V2 input: " + str(v2_input))
         return json.dumps(v2_input)
     
     elif hf_pipeline == "text-generation":
@@ -149,8 +146,8 @@ def convert_to_v2_input(hf_pipeline, input_data):
                 }
             ]
             }
-        print("Converted to V2 input: " + str(v2_input))
         return v2_input
+    
     elif hf_pipeline == "token-classification":
         v2_input = {
         "id": "string",
@@ -182,7 +179,6 @@ def convert_to_v2_input(hf_pipeline, input_data):
             }
         ]
         }
-        print("Converted to V2 input: " + str(v2_input))
         return v2_input
     else:
         # Handle unsupported pipeline

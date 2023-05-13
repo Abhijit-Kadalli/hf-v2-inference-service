@@ -27,9 +27,8 @@ model_deployed_name = {
 
 def forward_request_to_model(model_deployed_url, v2_input):
     model_deployed_url = model_deployed_url + '/v2/models/'+ model_deployed_name[pipeline_name] +'/infer'
-    print("Forwarding request to model..." + model_deployed_url)
+    print("\nForwarding request to model..." + model_deployed_url)
     v2_input = json.dumps(v2_input)
-    print(type(v2_input))
     try:
         response = requests.post(model_deployed_url, data=v2_input)
         response.raise_for_status()
@@ -40,11 +39,10 @@ def forward_request_to_model(model_deployed_url, v2_input):
 
 @app.post("/")
 def predict(inputs: dict):
-    print("Received request for pipeline: ")
-    print(pipeline_name)
-    print("Received inputs: " + str(inputs))
+    print("\nReceived request for pipeline: "+ pipeline_name)
+    print("\nReceived inputs: " + str(inputs))
     v2_input = convert_to_v2_input(pipeline_name, inputs)
-    print("Converted to V2 input: " + str(v2_input))
+    print("\nConverted to V2 input: " + str(v2_input))
     response = forward_request_to_model(model_deployed_url, v2_input)
     return response
 
