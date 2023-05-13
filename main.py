@@ -21,12 +21,12 @@ model_deployed_url = args.model_deployed_url
 model_deployed_name = {
     "zero-shot-classification": "zero-shot-cl-test",
     "text-generation": "text-gen-test",
-    "object-detection": "object-detection",
+    "object-detection": "test-object-detect",
     "token-classification": "token-cl-test"
 }
 
 def forward_request_to_model(model_deployed_url, v2_input):
-    model_deployed_url = model_deployed_url + '/v2/models/'+ model_deployed_name[pipeline_name] +'/infer'
+    model_deployed_url = urljoin(model_deployed_url , '/v2/models/'+ model_deployed_name[pipeline_name] +'/infer')
     print("\nForwarding request to model..." + model_deployed_url)
     v2_input = json.dumps(v2_input)
     try:
@@ -38,7 +38,7 @@ def forward_request_to_model(model_deployed_url, v2_input):
 
 
 @app.post("/")
-def predict(inputs: dict):
+def predict(inputs):
     print("\nReceived request for pipeline: "+ pipeline_name)
     print("\nReceived inputs: " + str(inputs))
     v2_input = convert_to_v2_input(pipeline_name, inputs)

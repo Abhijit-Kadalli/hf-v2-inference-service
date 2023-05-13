@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from PIL import Image
 import json
+import base64
 # from pydantic import BaseModel as _BaseModel
 # from typing import Any, Dict, List, Optional
 
@@ -88,40 +89,48 @@ def convert_to_v2_input(hf_pipeline, input_data):
         return v2_input
 
     elif hf_pipeline == "object-detection":
+        with open(input_data["inputs"], 'rb') as file:
+            image_bytes = file.read()
+
+        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
         v2_input = {
-        "id": "string",
-        "parameters": {
-            "content_type": "string",
-            "headers": {}
-        },
-        "inputs": [
-            {
-            "name": "inputs",
-            "shape": [
-                0
-            ],
-            "datatype": "BOOL",
-            "parameters": {
-                "content_type": "bytes",
-                "headers": {}
-            },
-            "data": input_data  
-            }
-        ],
-        "outputs": [
-            {
-            "name": "string",
             "parameters": {
                 "content_type": "string",
                 "headers": {}
+            },
+            "inputs": [
+                {
+                "name": "image",
+                "shape": [
+                    -1,
+                    -1,
+                    -1
+                ],
+                "datatype": "BYTES",
+                "parameters": {
+                    "content_type": "image/jpeg"
+                },
+                "data": image_base64
+                }
+            ],
+            "outputs": [
+                {
+                "name": "detections",
+                "parameters": {
+                    "headers": {}
+                }
+                }
+            ]
             }
-            }
-        ]
-        }
-        return json.dumps(v2_input)
-    
+
+        return v2_input
+
     elif hf_pipeline == "text-generation":
         v2_input = {
+            "parameters": {
+                "content_type": "application/json",
+                "headers": {}
+            },
             "inputs": [
                 {
                 "name": "text_inputs",
