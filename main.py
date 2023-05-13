@@ -21,6 +21,8 @@ model_deployed_url = args.model_deployed_url
 model_deployed_name = {
     "zero-shot-classification": "zero-shot-cl-test",
     "text-generation": "text-gen-test",
+    "object-detection": "object-detection",
+    "token-classification": "token-cl-test"
 }
 
 def forward_request_to_model(model_deployed_url, v2_input):

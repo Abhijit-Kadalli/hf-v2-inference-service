@@ -1,14 +1,7 @@
-import requests
-
-API_URL = "https://api-inference.huggingface.co/models/TahaDouaji/detr-doc-table-detection"
-headers = {"Authorization": "Bearer {api}"}
-
+import base64
 def query(filename):
     with open(filename, "rb") as f:
-        data = f.read()
-    print(data)
-    response = requests.post(API_URL, headers=headers, data=data)
-    return response.json()
+        encoded_string = base64.b64encode(f.read()).decode("utf-8")
+    print(encoded_string)
 
-output = query("image.jpg")
-print(output)
+query("image.png")

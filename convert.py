@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-import PIL.Image
+from PIL import Image
 import json
 # from pydantic import BaseModel as _BaseModel
 # from typing import Any, Dict, List, Optional
@@ -45,7 +45,6 @@ def convert_to_v2_input(hf_pipeline, input_data):
     print("Received request for pipeline: " + hf_pipeline + " with input: " + str(input_data))
     print(type(input_data))
     if hf_pipeline == "zero-shot-classification":
-        #input_data = json.loads(input_data)
         v2_input = {
         "inputs": [
             {
@@ -87,21 +86,39 @@ def convert_to_v2_input(hf_pipeline, input_data):
         return json.dumps(v2_input)
 
     elif hf_pipeline == "object-detection":
-        if isinstance(input_data[0], PIL.Image.Image):
-            v2_input = {
-                "inputs": [
-                    MetadataTensor(
-                    name="inputs",
-                    shape=[-1],
-                    datatype="BYTES",
-                    parameters=dict(content_type="pillow_image"),
-                    data= input_data
-                )
-                ],
-                "outputs": [],
+        v2_input = {
+        "id": "string",
+        "parameters": {
+            "content_type": "string",
+            "headers": {}
+        },
+        "inputs": [
+            {
+            "name": "inputs",
+            "shape": [
+                0
+            ],
+            "datatype": "BOOL",
+            "parameters": {
+                "content_type": "bytes",
+                "headers": {}
+            },
+            "data": input_data  
             }
+        ],
+        "outputs": [
+            {
+            "name": "string",
+            "parameters": {
+                "content_type": "string",
+                "headers": {}
+            }
+            }
+        ]
+        }
         print("Converted to V2 input: " + str(v2_input))
         return json.dumps(v2_input)
+    
     elif hf_pipeline == "text-generation":
         v2_input = {
             "inputs": [
@@ -131,21 +148,38 @@ def convert_to_v2_input(hf_pipeline, input_data):
         print("Converted to V2 input: " + str(v2_input))
         return v2_input
     elif hf_pipeline == "token-classification":
-        input_data = json.loads(input_data)
         v2_input = {
-            "inputs": [
-                MetadataTensor(
-                    name="args",
-                    shape=[-1],
-                    datatype="BYTES",
-                    parameters={"content_type": "str"},
-                    data=[input_data["inputs"]],
-                )
+        "id": "string",
+        "parameters": {
+            "content_type": "string",
+            "headers": {}
+        },
+        "inputs": [
+            {
+            "name": "inputs",
+            "shape": [
+                0
             ],
-            "outputs": [],
+            "datatype": "BOOL",
+            "parameters": {
+                "content_type": "string",
+                "headers": {}
+            },
+            "data": input_data['inputs']
+            }
+        ],
+        "outputs": [
+            {
+            "name": "string",
+            "parameters": {
+                "content_type": "string",
+                "headers": {}
+            }
+            }
+        ]
         }
         print("Converted to V2 input: " + str(v2_input))
-        return json.dumps(v2_input)
+        return v2_input
     else:
         # Handle unsupported pipeline
         raise HTTPException(status_code=400, detail="Unsupported pipeline")
