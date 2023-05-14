@@ -18,7 +18,7 @@ components:
     ports:
       - port: 8000
         expose: true
-        protocol: TCP
+        protocol: HTTP
     replicas: 1
     resources:
       cpu_limit: 0.2
