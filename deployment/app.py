@@ -5,7 +5,7 @@ from convert import *
 import json
 import uvicorn
 from urllib.parse import urljoin
-app = FastAPI(root_path=os.getenv("TFY_SERVICE_ROOT_PATH"))
+app = FastAPI()
 
 model_deployed_name = {
     "zero-shot-classification": "zero-shot-cl-test",
