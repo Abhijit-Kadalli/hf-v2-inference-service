@@ -1,29 +1,31 @@
 name: hf-v2-inference
-components:
-  - env:
-      ENVIRONMENT: dev
-      UVICORN_WEB_CONCURRENCY: '1'
-    name: hf-v2-inference
-    type: service
-    image:
-      type: build
-      build_spec:
-        type: tfy-python-buildpack
-        command: uvicorn app:app --port 8000 --host 0.0.0.0
-        python_version: '3.9'
-        requirements_path: requirements.txt
-        build_context_path: ./
-      build_source:
-        type: local
-    ports:
-      - port: 8000
-        expose: true
-        protocol: HTTP
-    replicas: 1
-    resources:
-      cpu_limit: 0.2
-      cpu_request: 0.2
-      memory_limit: 1500
-      memory_request: 1000
-      ephemeral_storage_limit: 1200
-      ephemeral_storage_request: 1000
+type: service
+image:
+  type: build
+  build_spec:
+    type: tfy-python-buildpack
+    command: uvicorn app:app --port uvicorn app:app --port 8000 --host 0.0.0.0
+    python_version: '3.9'
+    requirements_path: requirements.txt
+    build_context_path: ./deployment
+  build_source:
+    ref: 6cf7bef9aa9b6996d94efc66606ae2f545c0d7dc
+    type: git
+    repo_url: https://github.com/Abhijit-Kadalli/hf-v2-inference-service.git
+    branch_name: main
+ports:
+  - host: hf-v2-inference-intern-abhijit-8000.demo1.truefoundry.com
+    path: /predict/
+    port: 8000
+    expose: true
+    protocol: TCP
+    app_protocol: http
+replicas: 1
+resources:
+  cpu_limit: 0.3
+  cpu_request: 0.3
+  memory_limit: 1500
+  memory_request: 1000
+  ephemeral_storage_limit: 1200
+  ephemeral_storage_request: 1000
+allow_interception: false
