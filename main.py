@@ -5,6 +5,8 @@ import uvicorn
 from convert import *
 import json
 from urllib.parse import urljoin
+from typing import Union
+
 
 
 app = FastAPI()
@@ -38,7 +40,7 @@ def forward_request_to_model(model_deployed_url, v2_input):
 
 
 @app.post("/")
-def predict(inputs):
+def predict(inputs: Union[dict, str]):
     print("\nReceived request for pipeline: "+ pipeline_name)
     print("\nReceived inputs: " + str(inputs))
     v2_input = convert_to_v2_input(pipeline_name, inputs)
