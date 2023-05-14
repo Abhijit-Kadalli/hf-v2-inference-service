@@ -3,6 +3,7 @@ import requests
 from fastapi import FastAPI,HTTPException
 from convert import *
 import json
+import uvicorn
 from urllib.parse import urljoin
 app = FastAPI(root_path=os.getenv("TFY_SERVICE_ROOT_PATH"))
 
@@ -33,3 +34,6 @@ def predict(inputs: dict):
     print("\nConverted to V2 input: " + str(v2_input))
     response = forward_request_to_model(inputs, v2_input)
     return response
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
