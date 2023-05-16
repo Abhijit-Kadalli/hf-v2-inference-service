@@ -8,7 +8,19 @@ Deployed Service Endpoint:
 ```bash
 https://hf-v2-inference-intern-abhijit-8000.demo1.truefoundry.com/predict/
 ```
-
+Supported formats:
+```bash
+text-generation
+```
+```bash
+token-classification
+```
+```bash
+zero-shot-classification
+```
+```bash
+object-detection
+```
 Deployed Model Endpoint:
 ```bash
 https://text-gen-test-intern-abhijit.demo1.truefoundry.com
