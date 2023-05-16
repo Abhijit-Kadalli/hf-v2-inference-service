@@ -19,7 +19,7 @@ service = Service(
     ports=[
         Port(
             port=8000,
-            host="https://hf-v2-convertion-intern-abhijit-8000.demo1.truefoundry.com/predict/"
+            host="https://hf-v2-convertion-intern-abhijit-8000.demo1.truefoundry.com/"
         )
     ],
     resources=Resources(

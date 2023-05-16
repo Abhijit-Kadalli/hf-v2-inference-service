@@ -15,7 +15,7 @@ image:
     branch_name: main
 ports:
   - host: hf-v2-inference-intern-abhijit-8000.demo1.truefoundry.com
-    path: /predict/
+    path: /
     port: 8000
     expose: true
     protocol: TCP
