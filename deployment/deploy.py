@@ -2,7 +2,7 @@ import argparse
 import logging
 from servicefoundry import Build, PythonBuild, Service, Resources, Port
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', force=True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--workspace_fqn", required=True, type=str)
